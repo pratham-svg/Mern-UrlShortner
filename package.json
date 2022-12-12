@@ -1,0 +1,26 @@
+{
+  "name": "project-4-url-shortner",
+  "version": "1.0.0",
+  "description": "URL shortening is used to create shorter aliases for long URLs.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dk7696822/Project-4-URL-Shortner.git"
+  },
+  "author": "Rupam, Pratham, Arshad, Deepak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dk7696822/Project-4-URL-Shortner/issues"
+  },
+  "homepage": "https://github.com/dk7696822/Project-4-URL-Shortner#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.8.0",
+    "nanoid": "^4.0.0",
+    "validator": "^13.7.0"
+  }
+}
