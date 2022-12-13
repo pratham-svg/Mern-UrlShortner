@@ -1,5 +1,5 @@
 const urlModel = require("../urlModel/urlModel");
-const { nanoid } = require("nanoid");
+const shortid = require("shortid");
 const errorHandler = require("../errorHandler/errorHandler");
 exports.urlShortner = async (req, res) => {
   try {
@@ -8,12 +8,12 @@ exports.urlShortner = async (req, res) => {
     if (urlExist) {
       return res.status(200).send({ status: true, data: urlExist });
     }
-    const urlCode = nanoid();
+    const urlCode = shortid.generate();
     const shortUrl = `http://localhost:3000/${urlCode}`;
     const url = await urlModel.create({ urlCode, longUrl, shortUrl });
     return res.status(201).send({ status: true, data: url });
   } catch (err) {
-    return errorHandler();
+    return errorHandler(err, res);
   }
 };
 
@@ -25,6 +25,6 @@ exports.urlRedirect = async (req, res) => {
     }
     return res.status(302).redirect(url.longUrl);
   } catch (err) {
-    return errorHandler();
+    return errorHandler(err, res);
   }
 };
