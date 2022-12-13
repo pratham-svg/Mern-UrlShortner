@@ -11,7 +11,7 @@ const urlSchema = new mongoose.Schema({
   longUrl: {
     type: String,
     required: [true, "Please provide the URL"],
-    validate: [validator.isValidUrl, "Please provide a valid URL"],
+    validate: [validator.isURL, "Please provide a valid URL"],
   },
   shortUrl: { type: String, required: true, unique: true },
 });

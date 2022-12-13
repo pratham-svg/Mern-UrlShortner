@@ -1,5 +1,5 @@
 const urlModel = require("../urlModel/urlModel");
-const nanoid = require("nanoid");
+const { nanoid } = require("nanoid");
 const errorHandler = require("../errorHandler/errorHandler");
 exports.urlShortner = async (req, res) => {
   try {
