@@ -1,6 +1,6 @@
 const urlModel = require("../urlModel/urlModel");
 const shortid = require("shortid");
-const errorHandler = require("../errorHandler/errorHandler");
+const ErrorHandler = require("../errorHandler/ErrorHandlerClass");
 const redis = require("redis");
 const { promisify } = require("util");
 const redisClient = redis.createClient(
@@ -21,7 +21,7 @@ redisClient.on("connect", async function () {
 const SET_ASYNC = promisify(redisClient.SET).bind(redisClient);
 const GET_ASYNC = promisify(redisClient.GET).bind(redisClient);
 
-exports.urlShortner = async (req, res) => {
+exports.urlShortner = async (req, res, next) => {
   try {
     const longUrl = req.body.longUrl;
     const urlExist = await urlModel.findOne({ longUrl });
@@ -33,23 +33,23 @@ exports.urlShortner = async (req, res) => {
     const url = await urlModel.create({ urlCode, longUrl, shortUrl });
     return res.status(201).send({ status: true, data: url });
   } catch (err) {
-    return errorHandler(err, res);
+    return next(new ErrorHandler(400, err.message));
   }
 };
 
-exports.urlRedirect = async (req, res) => {
+exports.urlRedirect = async (req, res, next) => {
   try {
     let cachedUrl = await GET_ASYNC(`${req.params.urlCode}`);
     if (cachedUrl) {
-      return res.status(302).send({ status: true, data: cachedUrl });
+      return res.status(302).redirect(JSON.parse(cachedUrl).longUrl);
     }
     const url = await urlModel.findOne({ urlCode: req.params.urlCode });
     if (!url) {
-      return res.status(404).send({ status: false, message: "URL not found" });
+      return next(new ErrorHandler(404, "URL not found"));
     }
     await SET_ASYNC(`${req.params.urlCode}`, JSON.stringify(url));
     return res.status(302).redirect(url.longUrl);
   } catch (err) {
-    return errorHandler(err, res);
+    return next(new ErrorHandler(400, err.message));
   }
 };
